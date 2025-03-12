@@ -1,9 +1,9 @@
-package com.catchtable.api.user.service;
+package com.catchtable.api.noticifation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class NotificationService {
 }

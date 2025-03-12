@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: catchTable
+
+server:
+  servlet:
+    context-path: /v1/api
+
+
+jwt:
+  ACCESS_SECRET: nakWjXH+P5aplnL5aAsfhpPOXIxPwz8m7VZubEIdMYA=
+  salt: 5OMyiqcT6so4GsTg+czD448eM4PPwGRl8Uk6+lX1iqo=

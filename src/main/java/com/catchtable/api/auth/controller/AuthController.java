@@ -1,12 +1,17 @@
 package com.catchtable.api.auth.controller;
 
+import com.catchtable.api.auth.DTO.SignInUserDTO;
+import com.catchtable.api.auth.service.AuthService;
 import com.catchtable.api.user.DTO.UserDTO;
-import com.catchtable.api.user.repository.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController  // @Controller + @ResponseBody
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
+
+    private final AuthService authService;
 
     @PostMapping
     public String createToken() {
@@ -14,8 +19,8 @@ public class AuthController {
     }
 
     @PostMapping("/singup")
-    public UserDTO signUpUser(@RequestBody User user) {
-        return UserDTO.of(user);
+    public UserDTO signUpUser(@RequestBody SignInUserDTO signInUserDTO) {
+        return authService.signIn(signInUserDTO);
     }
 
     @PostMapping("/signin")
