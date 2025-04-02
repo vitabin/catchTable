@@ -1,5 +1,6 @@
 package com.catchtable.api.auth.domain;
 
+import com.catchtable.api.auth.DTO.TokenDTO;
 import com.catchtable.api.user.domain.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,11 +12,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name="token")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class TokenEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,25 +36,22 @@ public class TokenEntity {
         TokenEntity tokenEntity = new TokenEntity();
         tokenEntity.accessToken = accessToken;
         tokenEntity.refreshToken = refreshToken;
-
-        tokenEntity.setUser(user);
-        user.setToken(tokenEntity);
+        tokenEntity.user = user;
+        user.updateToken(tokenEntity);
 
         return tokenEntity;
     }
 
-    public void update(String accessToken, String refreshToken) {
-        accessToken = accessToken;
-        refreshToken = refreshToken;
+    public TokenEntity updateToken(String access, String refresh) {
+        accessToken = access;
+        refreshToken = refresh;
+        return this;
     }
 
-    @Override
-    public String toString() {
-        return "TokenEntity {" +
-                "id='" + id + '\'' +
-                ", asseceToken='" + accessToken+ '\'' +
-                ", refreshToken='" + refreshToken + '\'' +
-                ", user='" + user + "\'" +
-                "}";
+    public TokenDTO toDTO() {
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setRefreshToken(refreshToken);
+        tokenDTO.setAccessToken(accessToken);
+        return tokenDTO;
     }
 }

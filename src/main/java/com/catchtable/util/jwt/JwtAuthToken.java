@@ -5,16 +5,18 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 public class JwtAuthToken extends AbstractAuthenticationToken {
+
     private final String principal;
     private final String credentials;
     private final Collection<GrantedAuthority> authorities;
     private final boolean authenticated = true;
 
-    public JwtAuthToken(String principal, String credentials, Collection<GrantedAuthority> authorities) {
+    public JwtAuthToken(String principal, String credentials,
+        Collection<GrantedAuthority> authorities) {
         super(authorities); // log 출력시 한 번에 보기 위해 설정 null이여도 상관 없음
-        principal = principal;
-        credentials = credentials;
-        authorities = authorities;
+        this.principal = principal;
+        this.credentials = credentials;
+        this.authorities = authorities;
     }
 
     @Override

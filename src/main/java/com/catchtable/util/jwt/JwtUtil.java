@@ -54,24 +54,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String getUserName(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-    }
-
-    public String getUserRole(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("role",  String.class);
-    }
-
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser()
                     .verifyWith(key)
@@ -93,7 +75,7 @@ public class JwtUtil {
         return new JwtAuthToken(username, token, null);
     }
 
-    public void isExpired(String token) throws ExpiredJwtException {
+    public void validate(String token) throws ExpiredJwtException {
         Jwts.parser()
             .verifyWith(key)
             .build()

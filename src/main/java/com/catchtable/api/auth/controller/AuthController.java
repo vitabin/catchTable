@@ -1,12 +1,12 @@
 package com.catchtable.api.auth.controller;
 
+import com.catchtable.api.auth.DTO.SignInRequestDTO;
+import com.catchtable.api.auth.DTO.SignUpRequestDTO;
+import com.catchtable.api.auth.DTO.TokenDTO;
+import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.api.auth.service.AuthService;
-import com.catchtable.api.auth.service.DTO.SignInRequestDTO;
-import com.catchtable.api.auth.service.DTO.SignUpRequestDTO;
-import com.catchtable.api.auth.service.DTO.TokenDTO;
-import com.catchtable.api.user.service.DTO.UserDTO;
+import com.catchtable.api.user.domain.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,19 +25,28 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/singup")
-    public ResponseEntity<UserDTO> signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) throws BadRequestException {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.signUp(signUpRequestDTO));
+    @PostMapping("/signup")
+    public void signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
+        UserEntity userEntity = signUpRequestDTO.toEntity();
+        authService.signUp(userEntity);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<TokenDTO> singInUser(@RequestBody SignInRequestDTO signInRequestDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.signIn(signInRequestDTO));
+        UserEntity userEntity = signInRequestDTO.toEnity();
+        TokenEntity token = authService.signIn(userEntity);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(token.toDTO());
     }
 
     @PostMapping("/refresh")
-    public TokenDTO refreshToken(@RequestHeader("Authorization") String refreshToken) {
-        return authService.refresh(refreshToken);
+    public ResponseEntity<TokenDTO> refreshToken(
+        @RequestHeader("Authorization") String refreshToken) {
+        TokenEntity token = authService.refresh(refreshToken);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(token.toDTO());
     }
 
     @PostMapping("/signout")

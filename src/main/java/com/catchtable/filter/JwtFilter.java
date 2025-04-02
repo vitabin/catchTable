@@ -1,28 +1,24 @@
 package com.catchtable.filter;
 
 import com.catchtable.util.jwt.JwtUtil;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         String author = request.getHeader("Authorization");
 
         if (author == null) {
@@ -32,26 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = author.substring(7);
 
-        try {
-            jwtUtil.getAuthentication(token);
-        } catch (JwtException e) {
-            PrintWriter writer = response.getWriter();
-            writer.write("Invalid Token");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
-
-        try {
-            jwtUtil.isExpired(token);
-        } catch (ExpiredJwtException e) {
-            PrintWriter writer = response.getWriter();
-            writer.write("Expired Token");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
+        jwtUtil.getAuthentication(token);
+        jwtUtil.validate(token);
 
         Authentication authentication = jwtUtil.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext()
+                             .setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }

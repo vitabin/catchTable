@@ -1,21 +1,29 @@
 package com.catchtable.api.user.domain;
 
-import com.catchtable.api.auth.service.DTO.SignUpRequestDTO;
+import com.catchtable.api.auth.DTO.SignInRequestDTO;
+import com.catchtable.api.auth.DTO.SignUpRequestDTO;
 import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.base.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name="user")
-@Getter @Setter
+@Table(name = "user")
+@Getter
 @NoArgsConstructor
 public class UserEntity extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "user_name", unique = true)
@@ -42,36 +50,40 @@ public class UserEntity extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private UserRole role;
+    private String role;
 
-    public static UserEntity signUp(SignUpRequestDTO signUpRequestDTO) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.userName = signUpRequestDTO.getUserName();
-        userEntity.password = signUpRequestDTO.getPassword();
-        userEntity.realName = signUpRequestDTO.getRealName();
-        userEntity.phoneNumber = signUpRequestDTO.getPhoneNumber();
-        userEntity.nickName = signUpRequestDTO.getNickName();
-        userEntity.role = signUpRequestDTO.getRole();
-
-        return userEntity;
+    public UserEntity fromDto(SignInRequestDTO dto) {
+        userName = dto.getUserName();
+        password = dto.getPassword();
+        return this;
     }
 
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", realName='" + realName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", avartar='" + avartar + '\'' +
-                ", token=" + token + '\'' +
-                ", createdAt=" + super.getCreatedAt() + '\'' +
-                ", deletedAt=" + deletedAt + '\'' +
-                ", role=" + role + '\'' +
-                '}';
+    public UserEntity fromDTO(SignUpRequestDTO dto) {
+        userName = dto.getUserName();
+        password = dto.getPassword();
+        realName = dto.getRealName();
+        phoneNumber = dto.getPhoneNumber();
+        nickName = dto.getNickName();
+        return this;
+    }
+
+    public UserEntity updateToken(TokenEntity tokenEntity) {
+        token = tokenEntity;
+        return this;
+    }
+
+    public UserEntity withrawUser() {
+        deletedAt = LocalDateTime.now(Clock.systemDefaultZone());
+        userName = userName + "::" + "withdraw" + "::" + deletedAt;
+        return this;
+    }
+
+    public void authorize(String role) {
+        this.role = role;
+    }
+
+    public void authorize() {
+        this.role = "ROLE_USER";
     }
 }

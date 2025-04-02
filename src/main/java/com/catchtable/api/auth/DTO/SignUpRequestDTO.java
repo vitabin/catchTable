@@ -1,16 +1,14 @@
-package com.catchtable.api.auth.service.DTO;
+package com.catchtable.api.auth.DTO;
 
-import com.catchtable.api.user.domain.UserRole;
+import com.catchtable.api.user.domain.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-@Getter @Setter
+@Getter
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SignUpRequestDTO {
 
@@ -31,17 +29,20 @@ public class SignUpRequestDTO {
     @NotNull
     private String nickName;
 
-    @NotNull
-    private UserRole role =  UserRole.ROLE_USER;
+    public UserEntity toEntity() {
+        UserEntity userEntity = new UserEntity();
+        userEntity.fromDTO(this);
+        return userEntity;
+    }
 
     @Override
     public String toString() {
-        return "SignUpUserDTO {" +
-                "userName: " + userName + '\'' +
-                "password: " + password + '\'' +
-                "phoneNumber: " + phoneNumber + '\'' +
-                "realName: " + realName + '\'' +
-                "nickName: " + nickName + '\'' +
-                "role: " + role;
+        return "SignUpRequestDTO{" +
+            "userName='" + userName + '\'' +
+            "password='" + password + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", realName='" + realName + '\'' +
+            ", nickName='" + nickName + '\'' +
+            '}';
     }
 }
