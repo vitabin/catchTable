@@ -8,15 +8,15 @@ import java.util.List;
 @RequestMapping("/reviews")
 public class ReviewController {
 
-    @PostMapping()
-    public ReviewDTO createReview(){}
-
-    @GetMapping()
-    public List<ReviewDTO> getReview(){}
-
-    @PatchMapping()
-    public void patchReview(@RequestParam long id){}
-
-    @DeleteMapping()
-    public void deleteReview(@RequestParam long id){}
+//    @PostMapping()
+//    public ReviewDTO createReview(){}
+//
+//    @GetMapping()
+//    public List<ReviewDTO> getReview(){}
+//
+//    @PatchMapping()
+//    public void patchReview(@RequestParam long id){}
+//
+//    @DeleteMapping()
+//    public void deleteReview(@RequestParam long id){}
 }

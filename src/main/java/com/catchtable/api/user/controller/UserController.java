@@ -1,7 +1,6 @@
 package com.catchtable.api.user.controller;
 
-import com.catchtable.api.user.DTO.UserDTO;
-import org.springframework.stereotype.Controller;
+import com.catchtable.api.user.service.DTO.UserDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

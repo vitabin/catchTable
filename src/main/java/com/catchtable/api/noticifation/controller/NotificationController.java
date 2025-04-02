@@ -10,9 +10,9 @@ public class NotificationController {
     @PostMapping("/reservations")
     public void createReservationNotification(){}
 
-    @GetMapping()
-    public List<NotificationDTO> getNotifications(){}
-
-    @GetMapping()
-    public NotificationDTO getNotification(@RequestParam long id){}
+//    @GetMapping()
+//    public List<NotificationDTO> getNotifications(){}
+//
+//    @GetMapping()
+//    public NotificationDTO getNotification(@RequestParam long id){}
 }

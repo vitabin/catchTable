@@ -1,0 +1,5 @@
+1. filter 추가 시 bean으로 등록 할 경우 원하는 위치에 추가되지 않을 수 있음 ref: https://stackoverflow.com/questions/73865881/whats-the-proper-way-to-add-spring-security-filter-only-for-specific-url
+    스프링 시큐리티 필터들은 GenericFilterBean 기반으로 생성합니다. 이 필터를 스프링 @Bean (Component 포함)으로 등록할 경우 스프링이 어플리케이션 구동시 자동으로 컴포넌트 스캔을 진행하여 SecurityFilterChain 영역이 아닌 서블릿 필터 영역에 등록을 진행하게 됩니다.
+     이렇게 되면 우리가 원하는 영역에 필터가 등록되지 않는 이슈가 발생하게 됩니다.
+
+     따라서 우리가 원하는 SecurityFilterChain 영역 내부 특정 순서로 등록되기 위해서는 무조건 @Bean을 제거하고 new로 찍어내셔야 합니다.
