@@ -20,9 +20,9 @@ public enum ErrorMessage {
     private final int code;
 
     ErrorMessage(HttpStatus status, String msg) {
-        this.status = status;
-        this.msg = msg;
-        this.code = status.value();
+        status = status;
+        msg = msg;
+        code = status.value();
     }
 
 }

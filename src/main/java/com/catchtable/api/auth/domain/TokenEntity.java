@@ -1,7 +1,14 @@
 package com.catchtable.api.auth.domain;
 
 import com.catchtable.api.user.domain.UserEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,17 +44,17 @@ public class TokenEntity {
     }
 
     public void update(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+        accessToken = accessToken;
+        refreshToken = refreshToken;
     }
 
     @Override
     public String toString() {
         return "TokenEntity {" +
                 "id='" + id + '\'' +
-                ", asseceToken='" + this.accessToken+ '\'' +
-                ", refreshToken='" + this.refreshToken + '\'' +
-                ", user='" + this.user + "\'" +
+                ", asseceToken='" + accessToken+ '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", user='" + user + "\'" +
                 "}";
     }
 }

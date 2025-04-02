@@ -1,9 +1,8 @@
 package com.catchtable.util.jwt;
 
+import java.util.Collection;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
 
 public class JwtAuthToken extends AbstractAuthenticationToken {
     private final String principal;
@@ -13,28 +12,28 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
 
     public JwtAuthToken(String principal, String credentials, Collection<GrantedAuthority> authorities) {
         super(authorities); // log 출력시 한 번에 보기 위해 설정 null이여도 상관 없음
-        this.principal = principal;
-        this.credentials = credentials;
-        this.authorities = authorities;
+        principal = principal;
+        credentials = credentials;
+        authorities = authorities;
     }
 
     @Override
     public String getCredentials() {
-        return this.credentials;
+        return credentials;
     }
 
     @Override
     public Object getPrincipal() {
-        return this.principal;
+        return principal;
     }
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return authorities;
     }
 
     @Override
     public boolean isAuthenticated() {
-        return this.authenticated;
+        return authenticated;
     }
 }

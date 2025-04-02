@@ -3,18 +3,18 @@ package com.catchtable.filter;
 import com.catchtable.util.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.io.PrintWriter;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = author.substring(7);
 
         try {
-            this.jwtUtil.getAuthentication(token);
+            jwtUtil.getAuthentication(token);
         } catch (JwtException e) {
             PrintWriter writer = response.getWriter();
             writer.write("Invalid Token");
@@ -42,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         try {
-            this.jwtUtil.isExpired(token);
+            jwtUtil.isExpired(token);
         } catch (ExpiredJwtException e) {
             PrintWriter writer = response.getWriter();
             writer.write("Expired Token");
@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        Authentication authentication = this.jwtUtil.getAuthentication(token);
+        Authentication authentication = jwtUtil.getAuthentication(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);

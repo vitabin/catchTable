@@ -22,7 +22,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     public SecurityConfig(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+        jwtUtil = jwtUtil;
     }
 
     @Bean
