@@ -2,10 +2,10 @@ package com.catchtable.api.reservation.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 //@Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
 public class ReservationEntity {
+
 }

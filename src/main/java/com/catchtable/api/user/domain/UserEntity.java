@@ -73,7 +73,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public UserEntity withrawUser() {
+    public UserEntity withdrawUser() {
         deletedAt = LocalDateTime.now(Clock.systemDefaultZone());
         userName = userName + "::" + "withdraw" + "::" + deletedAt;
         return this;

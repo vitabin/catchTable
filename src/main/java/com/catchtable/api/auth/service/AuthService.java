@@ -75,6 +75,6 @@ public class AuthService {
 
         UserEntity user = tokenEntity.getUser();
         tokenRepository.delete(tokenEntity);
-        userRepository.save(user.withrawUser());
+        userRepository.save(user.withdrawUser());
     }
 }

@@ -14,11 +14,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="token")
+@Table(name = "token")
 @Getter
 @NoArgsConstructor
 public class TokenEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
@@ -50,8 +52,6 @@ public class TokenEntity {
 
     public TokenDTO toDTO() {
         TokenDTO tokenDTO = new TokenDTO();
-        tokenDTO.setRefreshToken(refreshToken);
-        tokenDTO.setAccessToken(accessToken);
-        return tokenDTO;
+        return tokenDTO.create(accessToken, refreshToken);
     }
 }

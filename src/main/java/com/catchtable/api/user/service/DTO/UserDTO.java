@@ -1,17 +1,14 @@
 package com.catchtable.api.user.service.DTO;
 
 import com.catchtable.api.user.domain.UserEntity;
-import com.catchtable.api.user.domain.UserRole;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
-@Getter @Setter
+@Getter
 public class UserDTO {
+
     private long id;
     private String userName;
     private String realName;

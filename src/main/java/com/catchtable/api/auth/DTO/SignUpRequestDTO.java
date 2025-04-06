@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SignUpRequestDTO {
 
