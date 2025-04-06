@@ -79,6 +79,10 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
+    public void deleteToken() {
+        token = null;
+    }
+
     public void authorize(String role) {
         this.role = role;
     }

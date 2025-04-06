@@ -1,6 +1,12 @@
 package com.catchtable.filter;
 
+import com.catchtable.exception.error.AuthError;
+import com.catchtable.response.ErrorResponse;
 import com.catchtable.util.jwt.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +34,27 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = author.substring(7);
 
-        jwtUtil.getAuthentication(token);
-        jwtUtil.validate(token);
+        try {
+            jwtUtil.getAuthentication(token);
+            jwtUtil.validate(token);
+        } catch (JwtException je) {
+            AuthError error = AuthError.INVALID_TOKEN;
+
+            if (je.getClass()
+                  .equals(ExpiredJwtException.class)) {
+                error = AuthError.EXPIRED_TOKEN;
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter()
+                    .write(objectMapper.writeValueAsString(
+                        ErrorResponse.create(error)
+                    ));
+            return;
+        }
 
         Authentication authentication = jwtUtil.getAuthentication(token);
         SecurityContextHolder.getContext()

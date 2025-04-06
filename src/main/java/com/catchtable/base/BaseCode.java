@@ -4,7 +4,7 @@ public interface BaseCode {
 
     String name();
 
-    int getCode();
+    int getStatus();
 
     String getMessage();
 }

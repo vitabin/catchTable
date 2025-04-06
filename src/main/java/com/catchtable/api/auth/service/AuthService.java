@@ -4,8 +4,9 @@ import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.api.auth.repository.TokenRepository;
 import com.catchtable.api.user.domain.UserEntity;
 import com.catchtable.api.user.repository.UserRepository;
+import com.catchtable.exception.error.AuthError;
+import com.catchtable.exception.exception.AuthException;
 import com.catchtable.util.jwt.JwtUtil;
-import java.security.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ public class AuthService {
 
     public TokenEntity signIn(UserEntity userEntity) {
         UserEntity user = userRepository.findByUserName(userEntity.getUserName())
-                                        .orElseThrow();
+                                        .orElseThrow(() -> new AuthException(AuthError.WRONG_USERNAME_OR_PASSWORD));
+
         if (!passwordEncoder.matches(userEntity.getPassword(), user.getPassword())) {
-            throw new InvalidParameterException();
+            throw new AuthException(AuthError.WRONG_USERNAME_OR_PASSWORD);
         }
 
         String accessKey = jwtUtil.generateAccessToken(user.getUserName(), user.getRole());
@@ -47,7 +49,7 @@ public class AuthService {
     public TokenEntity refresh(String refreshToken) {
         String token = jwtUtil.resolveToken(refreshToken);
         TokenEntity tokenEntity = tokenRepository.findByRefreshToken(token)
-                                                 .orElseThrow(InvalidParameterException::new);
+                                                 .orElseThrow(() -> new AuthException(AuthError.INVALID_TOKEN));
 
         UserEntity user = tokenEntity.getUser();
         String access = jwtUtil.generateAccessToken(user.getUserName(), user.getRole());
@@ -61,8 +63,9 @@ public class AuthService {
     public void signOut(String refreshToken) {
         String token = jwtUtil.resolveToken(refreshToken);
         TokenEntity tokenEntity = tokenRepository.findByRefreshToken(token)
-                                                 .orElseThrow(InvalidParameterException::new);
-
+                                                 .orElseThrow(() -> new AuthException(AuthError.TOKEN_NOT_FOUND));
+        UserEntity user = tokenEntity.getUser();
+        user.deleteToken();
         tokenRepository.delete(tokenEntity);
     }
 
@@ -71,7 +74,7 @@ public class AuthService {
         String token = jwtUtil.resolveToken(accessToken);
 
         TokenEntity tokenEntity = tokenRepository.findByAccessToken(token)
-                                                 .orElseThrow(InvalidParameterException::new);
+                                                 .orElseThrow(() -> new AuthException(AuthError.INVALID_TOKEN));
 
         UserEntity user = tokenEntity.getUser();
         tokenRepository.delete(tokenEntity);

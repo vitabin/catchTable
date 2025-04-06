@@ -1,7 +1,6 @@
 package com.catchtable.config;
 
 import com.catchtable.filter.JwtFilter;
-import com.catchtable.filter.SignUpFilter;
 import com.catchtable.util.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +45,6 @@ public class SecurityConfig {
                             .hasRole("USER")
                             .anyRequest()
                             .authenticated())
-            .addFilterBefore(new SignUpFilter(), BasicAuthenticationFilter.class)
             .addFilterBefore(new JwtFilter(jwtUtil), BasicAuthenticationFilter.class)
         ;
 

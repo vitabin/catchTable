@@ -1,7 +1,6 @@
 package com.catchtable.util.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -36,30 +35,31 @@ public class JwtUtil {
 
     public String generateAccessToken(String userName, String role) {
         return Jwts.builder()
-                .subject(userName)
-                .claim("role", role)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + accessExpiration))
-                .signWith(key)
-                .compact();
+                   .subject(userName)
+                   .claim("role", role)
+                   .issuedAt(new Date())
+                   .expiration(new Date(System.currentTimeMillis() + accessExpiration))
+                   .signWith(key)
+                   .compact();
     }
 
     public String generateRefreshToken(String userName, String role) {
         return Jwts.builder()
-                .subject(userName)
-                .claim("role", role)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
-                .signWith(key)
-                .compact();
+                   .subject(userName)
+                   .claim("role", role)
+                   .issuedAt(new Date())
+                   .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                   .signWith(key)
+                   .compact();
     }
 
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                            .verifyWith(key)
+                            .build()
+                            .parseSignedClaims(token)
+                            .getPayload()
+            ;
         String username = claims.getSubject();
         Object roleClaim = claims.get("role");
 
@@ -67,21 +67,23 @@ public class JwtUtil {
             return new JwtAuthToken(username, token, List.of(new SimpleGrantedAuthority(role)));
         } else if (roleClaim instanceof List<?> roles) {
             List<GrantedAuthority> authorities = roles.stream()
-                    .map(Object::toString)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+                                                      .map(Object::toString)
+                                                      .map(SimpleGrantedAuthority::new)
+                                                      .collect(Collectors.toList())
+                ;
             return new JwtAuthToken(username, token, authorities);
-    }
+        }
         return new JwtAuthToken(username, token, null);
     }
 
-    public void validate(String token) throws ExpiredJwtException {
+    public void validate(String token) {
         Jwts.parser()
             .verifyWith(key)
             .build()
             .parseSignedClaims(token)
             .getPayload()
-            .getExpiration();
+            .getExpiration()
+        ;
     }
 
     public String resolveToken(String token) {
