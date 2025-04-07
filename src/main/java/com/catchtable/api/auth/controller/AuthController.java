@@ -5,7 +5,7 @@ import com.catchtable.api.auth.DTO.SignUpRequestDTO;
 import com.catchtable.api.auth.DTO.TokenDTO;
 import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.api.auth.service.AuthService;
-import com.catchtable.api.user.domain.UserEntity;
+import com.catchtable.api.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +27,12 @@ public class AuthController {
 
     @PostMapping("/signup")
     public void signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
-        UserEntity userEntity = signUpRequestDTO.toEntity();
-        authService.signUp(userEntity);
+        authService.signUp(signUpRequestDTO.toParams(UserRole.ROLE_USER.toString()));
     }
 
     @PostMapping("/signin")
     public ResponseEntity<TokenDTO> singInUser(@RequestBody SignInRequestDTO signInRequestDTO) {
-        UserEntity userEntity = signInRequestDTO.toEnity();
-        TokenEntity token = authService.signIn(userEntity);
+        TokenEntity token = authService.signIn(signInRequestDTO.getUserName(), signInRequestDTO.getPassword());
 
         return ResponseEntity.status(HttpStatus.OK)
                              .body(token.toDTO());

@@ -1,5 +1,6 @@
 package com.catchtable.api.auth.service;
 
+import com.catchtable.api.auth.DTO.SignUpParam;
 import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.api.auth.repository.TokenRepository;
 import com.catchtable.api.user.domain.UserEntity;
@@ -21,9 +22,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public void signUp(UserEntity userEntity) {
-        userEntity.authorize();
-        userRepository.save(userEntity);
+    public void signUp(SignUpParam signUpParam) {
+        userRepository.save(UserEntity.of(signUpParam));
     }
 
     public boolean checkUserName(String username) {
@@ -31,11 +31,11 @@ public class AuthService {
                              .isPresent();
     }
 
-    public TokenEntity signIn(UserEntity userEntity) {
-        UserEntity user = userRepository.findByUserName(userEntity.getUserName())
+    public TokenEntity signIn(String username, String password) {
+        UserEntity user = userRepository.findByUserName(username)
                                         .orElseThrow(() -> new AuthException(AuthError.WRONG_USERNAME_OR_PASSWORD));
 
-        if (!passwordEncoder.matches(userEntity.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthException(AuthError.WRONG_USERNAME_OR_PASSWORD);
         }
 

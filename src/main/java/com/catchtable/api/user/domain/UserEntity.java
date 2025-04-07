@@ -1,7 +1,7 @@
 package com.catchtable.api.user.domain;
 
 import com.catchtable.api.auth.DTO.SignInRequestDTO;
-import com.catchtable.api.auth.DTO.SignUpRequestDTO;
+import com.catchtable.api.auth.DTO.SignUpParam;
 import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.base.BaseEntity;
 import jakarta.persistence.Column;
@@ -53,18 +53,20 @@ public class UserEntity extends BaseEntity {
     @Column(name = "role")
     private String role;
 
+    public static UserEntity of(SignUpParam signUpParam) {
+        UserEntity entity = new UserEntity();
+        entity.userName = signUpParam.userName();
+        entity.password = signUpParam.password();
+        entity.realName = signUpParam.realName();
+        entity.phoneNumber = signUpParam.phoneNumber();
+        entity.nickName = signUpParam.nickName();
+        entity.role = signUpParam.role();
+        return entity;
+    }
+
     public UserEntity fromDto(SignInRequestDTO dto) {
         userName = dto.getUserName();
         password = dto.getPassword();
-        return this;
-    }
-
-    public UserEntity fromDTO(SignUpRequestDTO dto) {
-        userName = dto.getUserName();
-        password = dto.getPassword();
-        realName = dto.getRealName();
-        phoneNumber = dto.getPhoneNumber();
-        nickName = dto.getNickName();
         return this;
     }
 
@@ -81,13 +83,5 @@ public class UserEntity extends BaseEntity {
 
     public void deleteToken() {
         token = null;
-    }
-
-    public void authorize(String role) {
-        this.role = role;
-    }
-
-    public void authorize() {
-        this.role = "ROLE_USER";
     }
 }

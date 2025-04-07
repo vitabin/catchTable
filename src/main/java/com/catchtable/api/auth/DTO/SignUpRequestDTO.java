@@ -1,6 +1,5 @@
 package com.catchtable.api.auth.DTO;
 
-import com.catchtable.api.user.domain.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,10 +27,8 @@ public class SignUpRequestDTO {
     @NotNull
     private String nickName;
 
-    public UserEntity toEntity() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.fromDTO(this);
-        return userEntity;
+    public SignUpParam toParams(String role) {
+        return new SignUpParam(userName, password, phoneNumber, realName, nickName, role);
     }
 
     @Override
