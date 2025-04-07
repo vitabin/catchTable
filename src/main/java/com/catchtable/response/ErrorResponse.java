@@ -1,27 +1,21 @@
 package com.catchtable.response;
 
 import com.catchtable.base.BaseCode;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
+import com.catchtable.base.BaseResponse;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-public class ErrorResponse {
+@SuperBuilder
+public class ErrorResponse extends BaseResponse<Object> {
 
-    private int status;
     private String error;
-    private String message;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime timestamp;
-
-    public static ErrorResponse create(BaseCode error) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.status = error.getStatus();
-        errorResponse.error = error.name();
-        errorResponse.message = error.getMessage();
-        errorResponse.timestamp = LocalDateTime.now();
-
-        return errorResponse;
+    public static ErrorResponse of(BaseCode error) {
+        return ErrorResponse.builder()
+                            .error(error.toString())
+                            .message(error.getMessage())
+                            .status(error.getStatus())
+                            .build();
     }
 }

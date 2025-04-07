@@ -1,7 +1,7 @@
 package com.catchtable.filter;
 
-import com.catchtable.exception.error.AuthError;
 import com.catchtable.response.ErrorResponse;
+import com.catchtable.response.error.AuthErrorCode;
 import com.catchtable.util.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -38,11 +38,11 @@ public class JwtFilter extends OncePerRequestFilter {
             jwtUtil.getAuthentication(token);
             jwtUtil.validate(token);
         } catch (JwtException je) {
-            AuthError error = AuthError.INVALID_TOKEN;
+            AuthErrorCode error = AuthErrorCode.INVALID_TOKEN;
 
             if (je.getClass()
                   .equals(ExpiredJwtException.class)) {
-                error = AuthError.EXPIRED_TOKEN;
+                error = AuthErrorCode.EXPIRED_TOKEN;
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -51,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter()
                     .write(objectMapper.writeValueAsString(
-                        ErrorResponse.create(error)
+                        ErrorResponse.of(error)
                     ));
             return;
         }

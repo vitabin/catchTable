@@ -6,9 +6,9 @@ import com.catchtable.api.auth.DTO.TokenDTO;
 import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.api.auth.service.AuthService;
 import com.catchtable.api.user.domain.UserRole;
+import com.catchtable.response.SuccessResponse;
+import com.catchtable.response.success.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,39 +26,40 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public void signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
+    public SuccessResponse<Object> signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         authService.signUp(signUpRequestDTO.toParams(UserRole.ROLE_USER.toString()));
+        return SuccessResponse.of(SuccessCode.WITHOUT_RESULT);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<TokenDTO> singInUser(@RequestBody SignInRequestDTO signInRequestDTO) {
+    public SuccessResponse<TokenDTO> singInUser(@RequestBody SignInRequestDTO signInRequestDTO) {
         TokenEntity token = authService.signIn(signInRequestDTO.getUserName(), signInRequestDTO.getPassword());
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .body(token.toDTO());
+        return SuccessResponse.of(SuccessCode.SUCCESS, token.toDTO());
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDTO> refreshToken(
+    public SuccessResponse<TokenDTO> refreshToken(
         @RequestHeader("Authorization") String refreshToken) {
         TokenEntity token = authService.refresh(refreshToken);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                             .body(token.toDTO());
+        return SuccessResponse.of(SuccessCode.SUCCESS, token.toDTO());
     }
 
     @PostMapping("/signout")
-    public void signOutUser(@RequestHeader("Authorization") String refreshToken) {
+    public SuccessResponse<Object> signOutUser(
+        @RequestHeader("Authorization") String refreshToken) {
         authService.signOut(refreshToken);
+        return SuccessResponse.of(SuccessCode.SUCCESS);
     }
 
     @DeleteMapping("/withdraw")
-    public void withdrawUser(@RequestHeader("Authorization") String accessToken) {
+    public SuccessResponse<Object> withdraw(@RequestHeader("Authorization") String accessToken) {
         authService.withdraw(accessToken);
+        return SuccessResponse.of(SuccessCode.SUCCESS);
     }
 
     @GetMapping("/user-name")
-    public boolean checkUserName(@RequestParam("userName") String username) {
-        return authService.checkUserName(username);
+    public SuccessResponse<Boolean> checkUserName(@RequestParam("userName") String username) {
+        boolean result = authService.checkUserName(username);
+        return SuccessResponse.of(SuccessCode.SUCCESS, result);
     }
 }

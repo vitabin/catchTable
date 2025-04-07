@@ -1,0 +1,16 @@
+package com.catchtable.base;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@Getter
+@SuperBuilder
+public class BaseResponse<T> {
+
+    protected String message;
+    protected int status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    protected LocalDateTime timestamp;
+}
