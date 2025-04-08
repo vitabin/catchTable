@@ -15,11 +15,13 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "user")
 @Getter
 @NoArgsConstructor
+@Where(clause = "deleted_at IS NULL")
 public class UserEntity extends BaseEntity {
 
     @Id
@@ -75,9 +77,14 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
+    public UserEntity updatePassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     public UserEntity withdrawUser() {
         deletedAt = LocalDateTime.now(Clock.systemDefaultZone());
-        userName = userName + "::" + "withdraw" + "::" + deletedAt;
+        deleteToken();
         return this;
     }
 

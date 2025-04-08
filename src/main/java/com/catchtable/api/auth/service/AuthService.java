@@ -23,7 +23,10 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void signUp(SignUpParam signUpParam) {
-        userRepository.save(UserEntity.of(signUpParam));
+        UserEntity user = UserEntity.of(signUpParam);
+        String password = user.getPassword();
+        String cryptedPassword = passwordEncoder.encode(password);
+        userRepository.save(user.updatePassword(cryptedPassword));
     }
 
     public boolean checkUserName(String username) {
@@ -85,7 +88,8 @@ public class AuthService {
                                                  .orElseThrow(() -> new AuthException(AuthErrorCode.INVALID_TOKEN));
 
         UserEntity user = tokenEntity.getUser();
+        user.withdrawUser();
         tokenRepository.delete(tokenEntity);
-        userRepository.save(user.withdrawUser());
+        userRepository.save(user);
     }
 }
