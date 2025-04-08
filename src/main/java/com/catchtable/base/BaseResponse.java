@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class BaseResponse<T> {
 
     protected String message;
-    protected int status;
+    protected String status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     protected LocalDateTime timestamp;
 }

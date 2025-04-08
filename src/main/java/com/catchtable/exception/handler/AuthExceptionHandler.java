@@ -14,7 +14,8 @@ public class AuthExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ErrorResponse handleCustomException(AuthException ce, HttpServletResponse response) {
         AuthErrorCode error = (AuthErrorCode) ce.getCode();
-        response.setStatus(error.getStatus());
+        response.setStatus(error.getHttpStatus()
+                                .value());
         return ErrorResponse.of(error);
     }
 }

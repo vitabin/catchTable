@@ -39,8 +39,16 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.WRONG_USERNAME_OR_PASSWORD);
         }
 
+        TokenEntity oldToken = user.getToken();
         String accessKey = jwtUtil.generateAccessToken(user.getUserName(), user.getRole());
         String refreshToken = jwtUtil.generateRefreshToken(user.getUserName(), user.getRole());
+
+        if (oldToken != null) {
+            TokenEntity newToken = oldToken.updateToken(accessKey, refreshToken);
+            user.updateToken(newToken);
+            return tokenRepository.save(newToken);
+        }
+
         TokenEntity tokenEntity = TokenEntity.create(user, accessKey, refreshToken);
 
         return tokenRepository.save(tokenEntity);

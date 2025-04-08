@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum UserErrorCode implements BaseCode {
-    USER_NOT_FOUND(4201, "User not found."),
+    USER_NOT_FOUND("4201", "User not found."),
     ;
-    private final int status;
+    private final String status;
     private final String message;
 }

@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum SuccessCode implements BaseCode {
-    SUCCESS(HttpStatus.OK, 2000, "요청이 정상적으로 처리되었습니다."),
-    WITHOUT_RESULT(HttpStatus.NO_CONTENT, 2004, null);
+    SUCCESS(HttpStatus.OK, "2000", "요청이 정상적으로 처리되었습니다."),
+    WITHOUT_RESULT(HttpStatus.NO_CONTENT, "2004", null);
 
     private final HttpStatus httpStatus;
-    private final int status;
+    private final String status;
     private final String message;
 }
