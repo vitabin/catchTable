@@ -27,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public SuccessResponse<Object> signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
-        authService.signUp(signUpRequestDTO.toParams(UserRole.ROLE_USER.toString()));
+        authService.signUp(signUpRequestDTO.toParams(UserRole.ROLE_USER));
         return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 

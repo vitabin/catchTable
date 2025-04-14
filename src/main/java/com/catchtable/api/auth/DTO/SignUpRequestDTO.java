@@ -1,5 +1,6 @@
 package com.catchtable.api.auth.DTO;
 
+import com.catchtable.api.user.domain.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -27,7 +28,7 @@ public class SignUpRequestDTO {
     @NotNull
     private String nickName;
 
-    public SignUpParam toParams(String role) {
+    public SignUpParam toParams(UserRole role) {
         return new SignUpParam(userName, password, phoneNumber, realName, nickName, role);
     }
 

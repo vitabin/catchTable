@@ -6,6 +6,8 @@ import com.catchtable.api.auth.domain.TokenEntity;
 import com.catchtable.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -53,7 +55,8 @@ public class UserEntity extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public static UserEntity of(SignUpParam signUpParam) {
         UserEntity entity = new UserEntity();

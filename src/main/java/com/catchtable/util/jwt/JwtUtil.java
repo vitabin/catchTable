@@ -1,5 +1,6 @@
 package com.catchtable.util.jwt;
 
+import com.catchtable.api.user.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -33,7 +34,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(accessSecret.getBytes());
     }
 
-    public String generateAccessToken(String userName, String role) {
+    public String generateAccessToken(String userName, UserRole role) {
         return Jwts.builder()
                    .subject(userName)
                    .claim("role", role)
@@ -43,7 +44,7 @@ public class JwtUtil {
                    .compact();
     }
 
-    public String generateRefreshToken(String userName, String role) {
+    public String generateRefreshToken(String userName, UserRole role) {
         return Jwts.builder()
                    .subject(userName)
                    .claim("role", role)
