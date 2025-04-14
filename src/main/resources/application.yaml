@@ -2,18 +2,29 @@ spring:
   application:
     name: catchTable
   datasource:
-    url: jdbc:mysql://localhost:3306/catch_table
-    username: root
-    password: q1w2e3
+    url: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 50
-    jpa:
-      hibernate:
-        ddl-auto: update
-        format_sql: true  # SQL을 보기 좋게 포맷팅
-        use_sql_comments: true
-      show_sql: true
+  devtools:
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+      use_sql_comments: true
+    show-sql: true
+
+  data:
+    redis:
+      host: redis
+      port: 6379
 
 server:
   servlet:
@@ -23,12 +34,10 @@ server:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG          # 실행되는 SQL 문 출력
+    org.hibernate.SQL: DEBUG
     root: info
 
 jwt:
-  ACCESS_SECRET: nakWjXH+P5aplnL5aAsfhpPOXIxPwz8m7VZubEIdMYA=
-#  REFRESH_SECRET: 5OMyiqcT6so4GsTg+czD448eM4PPwGRl8Uk6+lX1iqo=
+  ACCESS_SECRET: ${JWT_SECRET}
   ACCESS_EXPIRATION: 60 * 60 * 1000
-#  ACCESS_EXPIRATION: 1000 # for test
   REFRESH_EXPIRATION: 7 * 24 * 60 * 60 * 1000

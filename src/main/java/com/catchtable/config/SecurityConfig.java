@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         //경로별 인가 작업
         http.authorizeHttpRequests(
-                auth -> auth.requestMatchers("/auth/signin", "/error", "/auth/signup")
+                auth -> auth.requestMatchers("/auth/signin", "/error", "/auth/signup", "/auth/user-name")
                             .permitAll()
                             .requestMatchers("/auth/refresh")
                             .hasRole("USER")
