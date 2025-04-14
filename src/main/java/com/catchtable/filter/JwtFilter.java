@@ -33,18 +33,27 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = author.substring(7);
-
+        AuthErrorCode error = null;
         try {
             jwtUtil.getAuthentication(token);
             jwtUtil.validate(token);
-        } catch (JwtException je) {
-            AuthErrorCode error = AuthErrorCode.INVALID_TOKEN;
+        } catch (ExpiredJwtException e) {
+            error = AuthErrorCode.EXPIRED_TOKEN;
 
-            if (je.getClass()
-                  .equals(ExpiredJwtException.class)) {
-                error = AuthErrorCode.EXPIRED_TOKEN;
-            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter()
+                    .write(objectMapper.writeValueAsString(
+                        ErrorResponse.of(error)
+                    ));
+            return;
+        } catch (JwtException e) {
+            error = AuthErrorCode.INVALID_TOKEN;
+        }
 
+        if (error != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
