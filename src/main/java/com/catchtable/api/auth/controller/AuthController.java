@@ -11,11 +11,11 @@ import com.catchtable.response.success.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +28,7 @@ public class AuthController {
     @PostMapping("/signup")
     public SuccessResponse<Object> signUpUser(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         authService.signUp(signUpRequestDTO.toParams(UserRole.ROLE_USER.toString()));
-        return SuccessResponse.of(SuccessCode.WITHOUT_RESULT);
+        return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 
     @PostMapping("/signin")
@@ -57,9 +57,8 @@ public class AuthController {
         return SuccessResponse.of(SuccessCode.SUCCESS);
     }
 
-    @GetMapping("/user-name")
-    public SuccessResponse<Boolean> checkUserName(@RequestParam("userName") String username) {
-        boolean result = authService.checkUserName(username);
-        return SuccessResponse.of(SuccessCode.SUCCESS, result);
+    @GetMapping("/user-name/{username}")
+    public SuccessResponse<Boolean> checkUserName(@PathVariable String username) {
+        return SuccessResponse.of(SuccessCode.SUCCESS, authService.checkUserName(username));
     }
 }
