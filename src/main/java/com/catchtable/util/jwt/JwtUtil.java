@@ -58,8 +58,7 @@ public class JwtUtil {
                             .verifyWith(key)
                             .build()
                             .parseSignedClaims(token)
-                            .getPayload()
-            ;
+                            .getPayload();
         String username = claims.getSubject();
         Object roleClaim = claims.get("role");
 
@@ -69,8 +68,7 @@ public class JwtUtil {
             List<GrantedAuthority> authorities = roles.stream()
                                                       .map(Object::toString)
                                                       .map(SimpleGrantedAuthority::new)
-                                                      .collect(Collectors.toList())
-                ;
+                                                      .collect(Collectors.toList());
             return new JwtAuthToken(username, token, authorities);
         }
         return new JwtAuthToken(username, token, null);
@@ -82,8 +80,7 @@ public class JwtUtil {
             .build()
             .parseSignedClaims(token)
             .getPayload()
-            .getExpiration()
-        ;
+            .getExpiration();
     }
 
     public String resolveToken(String token) {
