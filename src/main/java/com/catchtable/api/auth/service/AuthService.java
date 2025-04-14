@@ -52,7 +52,7 @@ public class AuthService {
             return tokenRepository.save(newToken);
         }
 
-        TokenEntity tokenEntity = TokenEntity.create(user, accessKey, refreshToken);
+        TokenEntity tokenEntity = TokenEntity.of(user, accessKey, refreshToken);
 
         return tokenRepository.save(tokenEntity);
     }

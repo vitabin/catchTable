@@ -34,7 +34,7 @@ public class TokenEntity {
     @Column(name = "refresh_token", unique = true)
     private String refreshToken;
 
-    public static TokenEntity create(UserEntity user, String accessToken, String refreshToken) {
+    public static TokenEntity of(UserEntity user, String accessToken, String refreshToken) {
         TokenEntity tokenEntity = new TokenEntity();
         tokenEntity.accessToken = accessToken;
         tokenEntity.refreshToken = refreshToken;
@@ -52,6 +52,6 @@ public class TokenEntity {
 
     public TokenDTO toDTO() {
         TokenDTO tokenDTO = new TokenDTO();
-        return tokenDTO.create(accessToken, refreshToken);
+        return tokenDTO.of(accessToken, refreshToken);
     }
 }

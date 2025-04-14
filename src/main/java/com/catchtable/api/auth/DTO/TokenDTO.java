@@ -10,7 +10,7 @@ public class TokenDTO {
 
     private String refreshToken;
 
-    public TokenDTO create(String accessToken, String refreshToken) {
+    public TokenDTO of(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         return this;
