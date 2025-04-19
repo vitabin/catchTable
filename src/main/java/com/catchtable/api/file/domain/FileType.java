@@ -6,15 +6,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FileType {
-    CSV(".csv"),
-    XLS(".xls"),
-    XLSX(".xlsx"),
-    MP4(".mp4"),
-    MKV(".mkv"),
-    JPG(".jpg"),
-    PNG(".jng");
+    CSV(".csv", "csv"),
+    XLS(".xls", "excel"),
+    XLSX(".xlsx", "excel");
+//    MP4(".mp4", null),
+//    MKV(".mkv", null),
+//    JPG(".jpg", null),
+//    PNG(".jng", null);
 
     private final String extension;
+    private final String mimeType;
 
     public static FileType getFileType(String extension) {
         for (FileType fileType : FileType.values()) {

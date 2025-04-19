@@ -9,9 +9,7 @@ import com.catchtable.api.file.repository.FileProperties;
 import com.catchtable.api.file.service.FileService;
 import com.catchtable.api.user.domain.UserEntity;
 import com.catchtable.api.user.repository.UserRepository;
-import com.catchtable.util.file.classes.CouponParser;
-import com.catchtable.util.file.classes.CsvCouponFileParser;
-import com.catchtable.util.file.classes.ExcelCouponFileParser;
+import com.catchtable.util.file.interfaces.CouponFileParser;
 import com.catchtable.util.jwt.JwtUtil;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -21,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,15 +33,12 @@ public class AdminService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final FileProperties fileProperties;
+    private final Map<String, CouponFileParser> couponParserMap;
 
     //  TODO: response 변경
     public void uploadCoupon(UploadCouponParam uploadCouponParam) {
         FileType fileType = uploadCouponParam.type();
-        CouponParser parser = new CouponParser(new CsvCouponFileParser());
-
-        if (fileType == FileType.XLS || fileType == FileType.XLSX) {
-            parser = new CouponParser(new ExcelCouponFileParser());
-        }
+        CouponFileParser parser = couponParserMap.get(fileType.getMimeType());
 
         parser.validation(uploadCouponParam);
 
@@ -68,17 +64,14 @@ public class AdminService {
     public Resource downloadSampleCoupon(Long id, Integer nums) {
         FileEntity fileEntity = fileService.getFile(id);
         Path filePath = Path.of(fileProperties.getPreFixPath(), fileEntity.getPath());
-        CouponParser couponParser = new CouponParser(new CsvCouponFileParser());
-
-        if (fileEntity.getFileType() == FileType.XLS || fileEntity.getFileType() == FileType.XLSX) {
-            couponParser = new CouponParser(new ExcelCouponFileParser());
-        }
+        CouponFileParser parser = couponParserMap.get(fileEntity.getFileType()
+                                                                .getMimeType());
 
         Path sampleFilePath = Path.of(fileProperties.getPreFixPath(), "sample", fileEntity.getPath());
 
         try (BufferedWriter writer = Files.newBufferedWriter(sampleFilePath, StandardCharsets.UTF_8);
             InputStream inputStream = new FileInputStream(filePath.toFile())) {
-            List<String> rows = couponParser.getRow(inputStream, nums);
+            List<String> rows = parser.getRow(inputStream, nums);
 
             for (String row : rows) {
                 writer.write(row);
