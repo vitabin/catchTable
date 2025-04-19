@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CouponFileParser {
 
-    void validation(UploadCouponParam uploadCouponParam);
+    void validate(UploadCouponParam uploadCouponParam);
 
     List<String> getRow(InputStream fileInputStream, Integer num);
 }

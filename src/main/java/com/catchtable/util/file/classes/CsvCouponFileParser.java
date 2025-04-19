@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CsvCouponFileParser implements CouponFileParser {
 
     @Override
-    public void validation(UploadCouponParam uploadCouponParam) {
+    public void validate(UploadCouponParam uploadCouponParam) {
         MultipartFile file = uploadCouponParam.file();
 
         try (InputStream inputStream = file.getInputStream();

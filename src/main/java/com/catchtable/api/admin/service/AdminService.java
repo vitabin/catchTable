@@ -40,7 +40,7 @@ public class AdminService {
         FileType fileType = uploadCouponParam.type();
         CouponFileParser parser = couponParserMap.get(fileType.getMimeType());
 
-        parser.validation(uploadCouponParam);
+        parser.validate(uploadCouponParam);
 
         String username = jwtUtil.getUserName(jwtUtil.resolveToken(uploadCouponParam.token()));
         UserEntity userEntity = userRepository.findByUserName(username)
