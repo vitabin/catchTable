@@ -1,5 +1,7 @@
 package com.catchtable.api.file.domain;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +16,14 @@ public enum FileType {
 //    JPG(".jpg", null),
 //    PNG(".jng", null);
 
+    public static final Set<String> COUPON_EXTENSIONS = new HashSet<>();
+
+    static {
+        COUPON_EXTENSIONS.add(CSV.getExtension());
+        COUPON_EXTENSIONS.add(XLS.getExtension());
+        COUPON_EXTENSIONS.add(XLSX.getExtension());
+    }
+
     private final String extension;
     private final String mimeType;
 
@@ -25,5 +35,9 @@ public enum FileType {
             }
         }
         return null;
+    }
+
+    public static boolean isCouponExtension(String ce) {
+        return COUPON_EXTENSIONS.contains(ce);
     }
 }
