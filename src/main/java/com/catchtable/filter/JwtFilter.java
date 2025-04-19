@@ -39,16 +39,6 @@ public class JwtFilter extends OncePerRequestFilter {
             jwtUtil.validate(token);
         } catch (ExpiredJwtException e) {
             error = AuthErrorCode.EXPIRED_TOKEN;
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter()
-                    .write(objectMapper.writeValueAsString(
-                        ErrorResponse.of(error)
-                    ));
-            return;
         } catch (JwtException e) {
             error = AuthErrorCode.INVALID_TOKEN;
         }
