@@ -7,9 +7,7 @@ import com.catchtable.api.file.repository.FileRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,25 +19,17 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final FileProperties fileProperties;
+    private final LocalFileStorageService localFileStorageService;
 
     public FileEntity uploadFile(UploadFileParam uploadFileParam) {
         String relativePath = uploadFileParam.getRelativePath();
         String uuid = relativePath.substring(
             relativePath.lastIndexOf("/") + 1, relativePath.lastIndexOf("."));
         Path fullPath = Path.of(fileProperties.getPreFixPath(), relativePath);
-        Path directory = fullPath.getParent();
-
-        if (!Files.exists(directory)) {
-            try {
-                Files.createDirectories(directory);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create directory: " + directory, e);
-            }
-        }
 
         try (InputStream inputStream = uploadFileParam.multipartFile()
                                                       .getInputStream()) {
-            Files.copy(inputStream, fullPath, StandardCopyOption.REPLACE_EXISTING);
+            localFileStorageService.saveFile(inputStream, fullPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

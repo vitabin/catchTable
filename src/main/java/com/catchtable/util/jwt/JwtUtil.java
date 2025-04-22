@@ -75,6 +75,15 @@ public class JwtUtil {
         return new JwtAuthToken(username, token, null);
     }
 
+    public String getUserName(String token) {
+        return Jwts.parser()
+                   .verifyWith(key)
+                   .build()
+                   .parseSignedClaims(token)
+                   .getPayload()
+                   .getSubject();
+    }
+
     public void validate(String token) {
         Jwts.parser()
             .verifyWith(key)

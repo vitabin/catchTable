@@ -67,7 +67,8 @@ public class AdminService {
         CouponFileParser parser = couponParserMap.get(fileEntity.getFileType()
                                                                 .getMimeType());
 
-        Path sampleFilePath = Path.of(fileProperties.getPreFixPath(), "sample", fileEntity.getPath());
+        Path sampleFilePath = Path.of(fileProperties.getPreFixPath(), fileEntity.getPath()
+                                                                                .replace("coupon", "tmp"));
 
         try (BufferedWriter writer = Files.newBufferedWriter(sampleFilePath, StandardCharsets.UTF_8);
             InputStream inputStream = new FileInputStream(filePath.toFile())) {

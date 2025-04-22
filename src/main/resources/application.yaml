@@ -13,6 +13,16 @@ spring:
       enabled: true
   thymeleaf:
     cache: false
+  web:
+    resources:
+      static-locations: file:/var/www
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1GB
+      max-request-size: 2GB
+      file-size-threshold: 10MB
+      location: /var/www/files/tmp
 
   jpa:
     hibernate:
@@ -41,3 +51,6 @@ jwt:
   ACCESS_SECRET: ${JWT_SECRET}
   ACCESS_EXPIRATION: 60 * 60 * 1000
   REFRESH_EXPIRATION: 7 * 24 * 60 * 60 * 1000
+
+file:
+  pre-fix-path: /var/www/files

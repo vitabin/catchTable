@@ -10,9 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +28,7 @@ public class AdminController {
     // TODO: response 변경
     @PostMapping("/coupons")
     public void uploadCoupons(@RequestHeader("Authorization") String token,
-        @RequestBody UploadCouponDTO uploadCouponDTO) {
+        @ModelAttribute UploadCouponDTO uploadCouponDTO) {
         String filename = uploadCouponDTO.getFile()
                                          .getOriginalFilename();
 
@@ -56,8 +56,13 @@ public class AdminController {
 
     @GetMapping("/coupons/{id}/sample")
     private Resource downloadSampleCoupon(@RequestHeader("Authorization") String token,
-        @PathVariable Long id, @RequestParam("nums") Integer nums) {
-        return adminService.downloadSampleCoupon(id, nums);
+        @PathVariable Long id, @RequestParam("nums") Integer nums, HttpServletResponse response) {
+        Resource resource = adminService.downloadSampleCoupon(id, nums);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + resource.getFilename() + "\"");
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        return resource;
     }
 
     @GetMapping("/coupons/{id}")

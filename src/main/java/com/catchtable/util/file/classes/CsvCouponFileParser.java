@@ -32,11 +32,14 @@ public class CsvCouponFileParser implements CouponFileParser {
                 throw new RuntimeException("Missing header: customer_id");
             }
 
-            String record = parser.getRecords()
-                                  .get(0)
-                                  .get(headerMap.get("customer_id"));
+            String recordStr = null;
 
-            if (record == null) {
+            for (CSVRecord record : parser) {
+                recordStr = record.get(headerMap.get("customer_id"));
+                break;
+            }
+
+            if (recordStr == null) {
                 throw new RuntimeException("No records found");
             }
         } catch (IOException e) {
@@ -49,13 +52,15 @@ public class CsvCouponFileParser implements CouponFileParser {
         try (Reader reader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             CSVParser parser = CSVParser.parse(reader, CSVFormat.DEFAULT.withHeader())) {
 
-            List<CSVRecord> records = parser.getRecords();
             List<String> row = new ArrayList<>();
             row.add("customer_id");
-
-            for (int i = 0; i < num; i++) {
-                row.add(records.get(i)
-                               .get("customer_id") + "\n");
+            int i = 0;
+            for (CSVRecord record : parser) {
+                row.add(record.get("customer_id"));
+                i++;
+                if (i == num) {
+                    break;
+                }
             }
 
             return row;
