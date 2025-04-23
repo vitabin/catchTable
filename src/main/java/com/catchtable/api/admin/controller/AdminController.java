@@ -4,7 +4,9 @@ import com.catchtable.api.admin.DTO.UploadCouponDTO;
 import com.catchtable.api.admin.service.AdminService;
 import com.catchtable.api.file.domain.FileType;
 import com.catchtable.exception.exception.FileException;
+import com.catchtable.response.SuccessResponse;
 import com.catchtable.response.error.FileErrorCode;
+import com.catchtable.response.success.SuccessCode;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -29,7 +31,7 @@ public class AdminController {
 
     // TODO: response 변경
     @PostMapping("/coupons")
-    public void uploadCoupons(@RequestHeader("Authorization") String token,
+    public SuccessResponse<Object> uploadCoupons(@RequestHeader("Authorization") String token,
         @ModelAttribute UploadCouponDTO uploadCouponDTO) {
         String filename = uploadCouponDTO.getFile()
                                          .getOriginalFilename();
@@ -48,12 +50,14 @@ public class AdminController {
             throw new FileException(FileErrorCode.UNSUPPORTED_FILE_EXTENSION);
         }
         adminService.uploadCoupon(uploadCouponDTO.toPrams(token, filename, fileType));
+        return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 
     @DeleteMapping("/coupons/{id}")
-    private void deleteCoupons(@RequestHeader("Authorization") String token,
+    private SuccessResponse<Object> deleteCoupons(@RequestHeader("Authorization") String token,
         @PathVariable Long id) {
         adminService.deleteCoupon(id);
+        return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 
     @GetMapping("/coupons/{id}/sample")
