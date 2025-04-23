@@ -4,6 +4,8 @@ import com.catchtable.api.file.DTO.UploadFileParam;
 import com.catchtable.api.file.domain.FileEntity;
 import com.catchtable.api.file.repository.FileProperties;
 import com.catchtable.api.file.repository.FileRepository;
+import com.catchtable.exception.exception.FileException;
+import com.catchtable.response.error.FileErrorCode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -31,7 +33,7 @@ public class FileService {
                                                       .getInputStream()) {
             localFileStorageService.saveFile(inputStream, fullPath);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileException(FileErrorCode.IO_EXCEPTION);
         }
 
         return fileRepository.save(FileEntity.create(uploadFileParam, uuid, relativePath));
@@ -39,30 +41,30 @@ public class FileService {
 
     public FileEntity getFile(Long id) {
         return fileRepository.findById(id)
-                             .orElseThrow(() -> new RuntimeException("File Not Found"));
+                             .orElseThrow(() -> new FileException(FileErrorCode.FILE_NOT_FOUND));
     }
 
     public Resource downloadFile(Long id) {
         FileEntity fileEntity = fileRepository.findById(id)
-                                              .orElseThrow(() -> new RuntimeException("File Not Found"));
+                                              .orElseThrow(() -> new FileException(FileErrorCode.FILE_NOT_FOUND));
         Path filePath = Path.of(fileProperties.getPreFixPath(), fileEntity.getPath());
 
         try {
             Resource resource = new UrlResource(filePath.toUri());
 
             if (!resource.exists()) {
-                throw new RuntimeException("File not found");
+                throw new FileException(FileErrorCode.FILE_NOT_FOUND, filePath);
             }
 
             return resource;
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Invalid file path", e);
+            throw new FileException(FileErrorCode.INVALID_FILE_PATH, filePath);
         }
     }
 
     public void deleteFile(Long id) {
         FileEntity fileEntity = fileRepository.findById(id)
-                                              .orElseThrow(() -> new RuntimeException("File Not Found"));
+                                              .orElseThrow(() -> new FileException(FileErrorCode.FILE_NOT_FOUND));
         fileEntity.delete();
         fileRepository.save(fileEntity);
     }

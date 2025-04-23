@@ -3,6 +3,8 @@ package com.catchtable.api.admin.controller;
 import com.catchtable.api.admin.DTO.UploadCouponDTO;
 import com.catchtable.api.admin.service.AdminService;
 import com.catchtable.api.file.domain.FileType;
+import com.catchtable.exception.exception.FileException;
+import com.catchtable.response.error.FileErrorCode;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -34,7 +36,7 @@ public class AdminController {
 
 //      TODO: custom exception으로 변경
         if (filename == null) {
-            throw new RuntimeException("Filename can be null");
+            throw new FileException(FileErrorCode.NULL_FILE_NAME);
         }
 
         String extension = filename.substring(filename.lastIndexOf('.'))
@@ -43,7 +45,7 @@ public class AdminController {
 
 //      TODO: custom exception으로 변경
         if (!FileType.isCouponExtension(extension)) {
-            throw new RuntimeException("Unsupported file extension: " + extension);
+            throw new FileException(FileErrorCode.UNSUPPORTED_FILE_EXTENSION);
         }
         adminService.uploadCoupon(uploadCouponDTO.toPrams(token, filename, fileType));
     }

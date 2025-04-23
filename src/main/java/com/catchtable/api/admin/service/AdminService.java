@@ -9,6 +9,10 @@ import com.catchtable.api.file.repository.FileProperties;
 import com.catchtable.api.file.service.FileService;
 import com.catchtable.api.user.domain.UserEntity;
 import com.catchtable.api.user.repository.UserRepository;
+import com.catchtable.exception.exception.FileException;
+import com.catchtable.exception.exception.UserException;
+import com.catchtable.response.error.FileErrorCode;
+import com.catchtable.response.error.UserErrorCode;
 import com.catchtable.util.file.interfaces.CouponFileParser;
 import com.catchtable.util.jwt.JwtUtil;
 import java.io.BufferedWriter;
@@ -44,7 +48,7 @@ public class AdminService {
 
         String username = jwtUtil.getUserName(jwtUtil.resolveToken(uploadCouponParam.token()));
         UserEntity userEntity = userRepository.findByUserName(username)
-                                              .orElseThrow(() -> new RuntimeException("User not found")); // TODO: custom exception으로 변경
+                                              .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         UploadFileParam uploadFileParam = UploadFileParam.builder()
                                                          .multipartFile(uploadCouponParam.file())
@@ -80,7 +84,7 @@ public class AdminService {
 
             return new UrlResource(sampleFilePath.toUri());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileException(FileErrorCode.IO_EXCEPTION);
         }
     }
 

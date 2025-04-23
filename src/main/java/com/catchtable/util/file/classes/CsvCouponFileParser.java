@@ -1,6 +1,8 @@
 package com.catchtable.util.file.classes;
 
 import com.catchtable.api.admin.DTO.UploadCouponParam;
+import com.catchtable.exception.exception.FileException;
+import com.catchtable.response.error.FileErrorCode;
 import com.catchtable.util.file.interfaces.CouponFileParser;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +31,7 @@ public class CsvCouponFileParser implements CouponFileParser {
 
             Map<String, Integer> headerMap = parser.getHeaderMap();
             if (!headerMap.containsKey("customer_id")) {
-                throw new RuntimeException("Missing header: customer_id");
+                throw new FileException(FileErrorCode.HEADER_NOT_FOUND, "customer_id");
             }
 
             String recordStr = null;
@@ -40,10 +42,10 @@ public class CsvCouponFileParser implements CouponFileParser {
             }
 
             if (recordStr == null) {
-                throw new RuntimeException("No records found");
+                throw new FileException(FileErrorCode.EMPTY_FILE);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileException(FileErrorCode.IO_EXCEPTION);
         }
     }
 
@@ -65,7 +67,7 @@ public class CsvCouponFileParser implements CouponFileParser {
 
             return row;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileException(FileErrorCode.IO_EXCEPTION);
         }
     }
 
