@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FileType {
-    CSV(".csv", "csv"),
-    XLS(".xls", "excel"),
-    XLSX(".xlsx", "excel");
+    CSV(".csv"),
+    XLS(".xls"),
+    XLSX(".xlsx");
 //    MP4(".mp4", null),
 //    MKV(".mkv", null),
 //    JPG(".jpg", null),
@@ -20,7 +20,6 @@ public enum FileType {
     public static final Set<FileType> COUPON_UPLOAD_FILE_TYPE = Set.of(CSV, XLS, XLSX);
 
     private final String extension;
-    private final String mimeType;
 
     public static FileType getFileType(String extension) {
         for (FileType fileType : FileType.values()) {

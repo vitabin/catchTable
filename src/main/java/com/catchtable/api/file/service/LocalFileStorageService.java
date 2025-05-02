@@ -7,21 +7,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class LocalFileStorageService implements FileStorageService {
 
     @Override
-    public void saveFile(InputStream inputStream, Path path) {
+    public void saveFile(MultipartFile file, Path path) {
         try {
             Path directory = path.getParent();
             if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
             }
-            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+            file.transferTo(path);
         } catch (IOException e) {
+            deleteFile(path);
             throw new FileException(FileErrorCode.SAVE_FAIL, path);
         }
     }

@@ -24,25 +24,40 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Collectors;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AdminService {
 
     private final FileService fileService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final FileProperties fileProperties;
-    private final Map<String, CouponFileParser> couponParserMap;
+    private final Map<FileType, CouponFileParser> couponParserMap;
 
-    //  TODO: response 변경
+    public AdminService(FileService fileService,
+        JwtUtil jwtUtil,
+        UserRepository userRepository,
+        FileProperties fileProperties,
+        List<CouponFileParser> couponParsers) {
+
+        this.fileService = fileService;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+        this.fileProperties = fileProperties;
+        this.couponParserMap = couponParsers.stream()
+                                            .flatMap(parser -> parser.getSupportedFileTypes()
+                                                                     .stream()
+                                                                     .map(type -> Map.entry(type, parser)))
+                                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     public void uploadCoupon(UploadCouponParam uploadCouponParam) {
         FileType fileType = uploadCouponParam.type();
-        CouponFileParser parser = couponParserMap.get(fileType.getMimeType());
+        CouponFileParser parser = couponParserMap.get(fileType);
 
         parser.validate(uploadCouponParam);
 
@@ -68,8 +83,7 @@ public class AdminService {
     public Resource downloadSampleCoupon(Long id, Integer nums) {
         FileEntity fileEntity = fileService.getFile(id);
         Path filePath = Path.of(fileProperties.getPreFixPath(), fileEntity.getPath());
-        CouponFileParser parser = couponParserMap.get(fileEntity.getFileType()
-                                                                .getMimeType());
+        CouponFileParser parser = couponParserMap.get(fileEntity.getFileType());
 
         Path sampleFilePath = Path.of(fileProperties.getPreFixPath(), fileEntity.getPath()
                                                                                 .replace("coupon", "tmp"));

@@ -1,6 +1,7 @@
 package com.catchtable.util.file.classes;
 
 import com.catchtable.api.admin.DTO.UploadCouponParam;
+import com.catchtable.api.file.domain.FileType;
 import com.catchtable.exception.exception.FileException;
 import com.catchtable.response.error.FileErrorCode;
 import com.catchtable.util.file.interfaces.CouponFileParser;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,7 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component("excel")
+@Component
 public class ExcelCouponFileParser implements CouponFileParser {
 
     @Override
@@ -72,10 +74,15 @@ public class ExcelCouponFileParser implements CouponFileParser {
                     break;
                 }
             }
-            
+
             return list;
         } catch (IOException e) {
             throw new FileException(FileErrorCode.IO_EXCEPTION);
         }
+    }
+
+    @Override
+    public Set<FileType> getSupportedFileTypes() {
+        return Set.of(FileType.XLSX, FileType.XLS);
     }
 }

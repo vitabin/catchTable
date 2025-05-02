@@ -1,6 +1,7 @@
 package com.catchtable.util.file.classes;
 
 import com.catchtable.api.admin.DTO.UploadCouponParam;
+import com.catchtable.api.file.domain.FileType;
 import com.catchtable.exception.exception.FileException;
 import com.catchtable.response.error.FileErrorCode;
 import com.catchtable.util.file.interfaces.CouponFileParser;
@@ -12,13 +13,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component("csv")
+@Component
 public class CsvCouponFileParser implements CouponFileParser {
 
     @Override
@@ -71,5 +73,9 @@ public class CsvCouponFileParser implements CouponFileParser {
         }
     }
 
+    @Override
+    public Set<FileType> getSupportedFileTypes() {
+        return Set.of(FileType.CSV);
+    }
 }
 

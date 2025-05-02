@@ -6,8 +6,6 @@ import com.catchtable.api.file.repository.FileProperties;
 import com.catchtable.api.file.repository.FileRepository;
 import com.catchtable.exception.exception.FileException;
 import com.catchtable.response.error.FileErrorCode;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +21,15 @@ public class FileService {
     private final FileProperties fileProperties;
     private final LocalFileStorageService localFileStorageService;
 
-    public FileEntity uploadFile(UploadFileParam uploadFileParam) {
+    public void uploadFile(UploadFileParam uploadFileParam) {
         String relativePath = uploadFileParam.getRelativePath();
         String uuid = relativePath.substring(
             relativePath.lastIndexOf("/") + 1, relativePath.lastIndexOf("."));
         Path fullPath = Path.of(fileProperties.getPreFixPath(), relativePath);
 
-        try (InputStream inputStream = uploadFileParam.multipartFile()
-                                                      .getInputStream()) {
-            localFileStorageService.saveFile(inputStream, fullPath);
-        } catch (IOException e) {
-            throw new FileException(FileErrorCode.IO_EXCEPTION);
-        }
+        localFileStorageService.saveFile(uploadFileParam.multipartFile(), fullPath);
 
-        return fileRepository.save(FileEntity.create(uploadFileParam, uuid, relativePath));
+        fileRepository.save(FileEntity.create(uploadFileParam, uuid, relativePath));
     }
 
     public FileEntity getFile(Long id) {
