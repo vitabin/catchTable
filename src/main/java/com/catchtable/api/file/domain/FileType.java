@@ -1,6 +1,7 @@
 package com.catchtable.api.file.domain;
 
-import java.util.HashSet;
+import com.catchtable.exception.exception.FileException;
+import com.catchtable.response.error.FileErrorCode;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,7 @@ public enum FileType {
 //    JPG(".jpg", null),
 //    PNG(".jng", null);
 
-    public static final Set<String> COUPON_EXTENSIONS = new HashSet<>();
-
-    static {
-        COUPON_EXTENSIONS.add(CSV.getExtension());
-        COUPON_EXTENSIONS.add(XLS.getExtension());
-        COUPON_EXTENSIONS.add(XLSX.getExtension());
-    }
+    public static final Set<FileType> COUPON_UPLOAD_FILE_TYPE = Set.of(CSV, XLS, XLSX);
 
     private final String extension;
     private final String mimeType;
@@ -34,10 +29,10 @@ public enum FileType {
                 return fileType;
             }
         }
-        return null;
+        throw new FileException(FileErrorCode.UNSUPPORTED_FILE_EXTENSION, extension);
     }
 
-    public static boolean isCouponExtension(String ce) {
-        return COUPON_EXTENSIONS.contains(ce);
+    public static boolean isCouponExtension(FileType fileType) {
+        return COUPON_UPLOAD_FILE_TYPE.contains(fileType);
     }
 }

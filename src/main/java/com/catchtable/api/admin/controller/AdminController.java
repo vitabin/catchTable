@@ -29,14 +29,12 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    // TODO: response 변경
     @PostMapping("/coupons")
     public SuccessResponse<Object> uploadCoupons(@RequestHeader("Authorization") String token,
         @ModelAttribute UploadCouponDTO uploadCouponDTO) {
         String filename = uploadCouponDTO.getFile()
                                          .getOriginalFilename();
 
-//      TODO: custom exception으로 변경
         if (filename == null) {
             throw new FileException(FileErrorCode.NULL_FILE_NAME);
         }
@@ -45,8 +43,7 @@ public class AdminController {
                                    .toLowerCase();
         FileType fileType = FileType.getFileType(extension);
 
-//      TODO: custom exception으로 변경
-        if (!FileType.isCouponExtension(extension)) {
+        if (!FileType.isCouponExtension(fileType)) {
             throw new FileException(FileErrorCode.UNSUPPORTED_FILE_EXTENSION);
         }
         adminService.uploadCoupon(uploadCouponDTO.toPrams(token, filename, fileType));
