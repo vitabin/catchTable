@@ -34,6 +34,11 @@ public class FileController {
         return SuccessResponse.of(SuccessCode.SUCCESS, fileService.getUploadPreSignedUrl(param));
     }
 
+    @PostMapping("/s3")
+    public void validateFile(@RequestBody String objectKey) {
+
+    }
+
     @GetMapping("/s3")
     public SuccessResponse<PreSignedUrlResponse> getPreSignedUrl(
         @RequestParam("objectKey") String objectKey) {
