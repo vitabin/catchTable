@@ -16,6 +16,7 @@ public enum FileErrorCode implements BaseCode {
     DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "IO Exception"),
     LOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "IO Exception"),
     UNSUPPORTED_FILE_EXTENSION(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "Unsupported file extension"),
+    UNRESOLVED_PATH(HttpStatus.INTERNAL_SERVER_ERROR, "5005", "Unresolved path"),
 
     // 4xxx
     NULL_FILE_NAME(HttpStatus.BAD_REQUEST, "4001", "File name cannot be null"),

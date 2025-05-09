@@ -20,4 +20,13 @@ public class ErrorResponse extends BaseResponse<Object> {
                             .timestamp(LocalDateTime.now())
                             .build();
     }
+
+    public static ErrorResponse of(BaseCode error, String message) {
+        return ErrorResponse.builder()
+                            .error(error.toString())
+                            .message(message)
+                            .status(error.getStatus())
+                            .timestamp(LocalDateTime.now())
+                            .build();
+    }
 }

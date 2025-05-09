@@ -12,14 +12,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class SuccessResponse<T> extends BaseResponse<T> {
 
-    private T content;
+    private T result;
 
     public static <T> SuccessResponse<T> of(BaseCode code, T content) {
         return SuccessResponse.<T>builder()
                               .message(code.getMessage())
                               .status(code.getStatus())
                               .timestamp(LocalDateTime.now())
-                              .content(content)
+                              .result(content)
                               .build();
     }
 
@@ -28,7 +28,7 @@ public class SuccessResponse<T> extends BaseResponse<T> {
                               .message(code.getMessage())
                               .status(code.getStatus())
                               .timestamp(LocalDateTime.now())
-                              .content(null)
+                              .result(null)
                               .build();
     }
 }

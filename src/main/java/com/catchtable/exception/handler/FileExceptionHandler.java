@@ -16,6 +16,16 @@ public class FileExceptionHandler extends ResponseEntityExceptionHandler {
         FileErrorCode error = (FileErrorCode) e.getCode();
         response.setStatus(error.getHttpStatus()
                                 .value());
+
+        if (e.getPath() != null) {
+            return ErrorResponse.of(error, String.format(
+                error.getMessage() + " : [%s]", e.getPath()));
+        }
+
+        if (e.getFilename() != null) {
+            return ErrorResponse.of(error, String.format(
+                error.getMessage() + " : [%s]", e.getFilename()));
+        }
         return ErrorResponse.of(error);
     }
 }

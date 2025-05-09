@@ -1,5 +1,6 @@
 package com.catchtable.api.admin.controller;
 
+import com.catchtable.annotation.UserName;
 import com.catchtable.api.admin.DTO.UploadCouponDTO;
 import com.catchtable.api.admin.service.AdminService;
 import com.catchtable.api.file.domain.FileType;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +30,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/coupons")
-    public SuccessResponse<Object> uploadCoupons(@RequestHeader("Authorization") String token,
+    public SuccessResponse<Object> uploadCoupons(@UserName String username,
         @ModelAttribute UploadCouponDTO uploadCouponDTO) {
         String filename = uploadCouponDTO.getFile()
                                          .getOriginalFilename();
@@ -39,26 +39,24 @@ public class AdminController {
             throw new FileException(FileErrorCode.NULL_FILE_NAME);
         }
 
-        String extension = filename.substring(filename.lastIndexOf('.'))
-                                   .toLowerCase();
-        FileType fileType = FileType.getFileType(extension);
+        FileType fileType = FileType.getFileType(filename);
 
         if (!FileType.isCouponExtension(fileType)) {
             throw new FileException(FileErrorCode.UNSUPPORTED_FILE_EXTENSION);
         }
-        adminService.uploadCoupon(uploadCouponDTO.toPrams(token, filename, fileType));
+        adminService.uploadCoupon(uploadCouponDTO.toPrams(username, filename, fileType));
         return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 
     @DeleteMapping("/coupons/{id}")
-    private SuccessResponse<Object> deleteCoupons(@RequestHeader("Authorization") String token,
+    private SuccessResponse<Object> deleteCoupons(
         @PathVariable Long id) {
         adminService.deleteCoupon(id);
         return SuccessResponse.of(SuccessCode.WITHOUT_CONTENT);
     }
 
     @GetMapping("/coupons/{id}/sample")
-    private Resource downloadSampleCoupon(@RequestHeader("Authorization") String token,
+    private Resource downloadSampleCoupon(
         @PathVariable Long id, @RequestParam("nums") Integer nums, HttpServletResponse response) {
         Resource resource = adminService.downloadSampleCoupon(id, nums);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,

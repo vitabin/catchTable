@@ -11,15 +11,15 @@ public class FileException extends RuntimeException {
 
     private final BaseCode code;
     private Path path;
-    private String e;
+    private String filename;
 
     public FileException(BaseCode code, Path path) {
         this.code = code;
         this.path = path;
     }
 
-    public FileException(BaseCode code, String e) {
+    public FileException(BaseCode code, String filename) {
         this.code = code;
-        this.e = e;
+        this.filename = filename;
     }
 }

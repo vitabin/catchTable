@@ -1,6 +1,8 @@
 package com.catchtable.util.jwt;
 
 import com.catchtable.api.user.domain.UserRole;
+import com.catchtable.exception.exception.AuthException;
+import com.catchtable.response.error.AuthErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -95,7 +97,10 @@ public class JwtUtil {
 
     public String resolveToken(String token) {
         if (token == null) {
-            return null;
+            throw new AuthException(AuthErrorCode.NULL_TOKEN);
+        }
+        if (!token.startsWith("Bearer ")) {
+            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
 
         return token.substring(7);

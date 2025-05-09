@@ -13,7 +13,7 @@ public class UploadCouponDTO {
 
     private MultipartFile file;
 
-    public UploadCouponParam toPrams(String token, String filename, FileType fileType) {
-        return new UploadCouponParam(token, file, filename, fileType);
+    public UploadCouponParam toPrams(String username, String filename, FileType fileType) {
+        return new UploadCouponParam(username, file, filename, fileType);
     }
 }

@@ -34,8 +34,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = author.substring(7);
         AuthErrorCode error = null;
+        Authentication authentication = null;
+
         try {
-            jwtUtil.getAuthentication(token);
+            authentication = jwtUtil.getAuthentication(token);
             jwtUtil.validate(token);
         } catch (ExpiredJwtException e) {
             error = AuthErrorCode.EXPIRED_TOKEN;
@@ -55,7 +57,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        Authentication authentication = jwtUtil.getAuthentication(token);
         SecurityContextHolder.getContext()
                              .setAuthentication(authentication);
 
