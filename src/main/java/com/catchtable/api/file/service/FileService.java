@@ -101,6 +101,9 @@ public class FileService {
     }
 
     private String getUUID(String str) {
+        if (str == null || !str.contains("/") || !str.contains(".")) {
+            throw new FileException(FileErrorCode.INVALID_OBJECT_KEY, str);
+        }
         return str.substring(
             str.lastIndexOf("/") + 1, str.lastIndexOf("."));
     }

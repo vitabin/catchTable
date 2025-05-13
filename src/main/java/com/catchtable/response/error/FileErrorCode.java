@@ -23,6 +23,7 @@ public enum FileErrorCode implements BaseCode {
     INVALID_FILE_PATH(HttpStatus.BAD_REQUEST, "4001", "Invalid file path"),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "4004", "File not found"),
     HEADER_NOT_FOUND(HttpStatus.BAD_REQUEST, "4004", "Header not found"),
+    INVALID_OBJECT_KEY(HttpStatus.BAD_REQUEST, "4004", "Invalid object key"),
     ;
     private final HttpStatus httpStatus;
     private final String status;

@@ -19,6 +19,7 @@ public class S3Util {
     @Value("${cloud.s3.expiration}")
     private int expiration;
 
+    // Put --------------------------------------------------------------------------------
     public PutObjectRequest createPutObjectRequest(String objectKey) {
         return PutObjectRequest.builder()
                                .bucket(bucket)
@@ -33,7 +34,8 @@ public class S3Util {
                                       .putObjectRequest(putObjectRequest)
                                       .build();
     }
-
+    
+    // Get --------------------------------------------------------------------------------
     public GetObjectRequest createGetObjectRequest(String objectKey) {
         return GetObjectRequest.builder()
                                .bucket(bucket)
