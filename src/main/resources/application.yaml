@@ -31,7 +31,7 @@ spring:
     show-sql: true
   data:
     redis:
-      host: redis
+      host: redis-project
       port: 6379
 
 server:
@@ -44,6 +44,9 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     root: info
+    software:
+      amazon:
+        awssdk: DEBUG
 
 jwt:
   ACCESS_SECRET: ${JWT_SECRET}

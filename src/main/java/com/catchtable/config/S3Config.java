@@ -9,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Slf4j
@@ -36,10 +37,13 @@ public class S3Config {
 
     @Bean
     public S3Client s3Client(StaticCredentialsProvider awsCredentialsProvider) {
+        String endpoint =
+            this.endpoint.contains("localhost") ? "http://awslocal:4566" : this.endpoint;
         return S3Client.builder()
                        .endpointOverride(URI.create(endpoint))
                        .credentialsProvider(awsCredentialsProvider)
                        .region(Region.of(region))
+                       .forcePathStyle(true)
                        .build();
     }
 
@@ -49,6 +53,11 @@ public class S3Config {
                           .endpointOverride(URI.create(endpoint))
                           .region(Region.of(region))
                           .credentialsProvider(awsCredentialsProvider)
+                          .serviceConfiguration(
+                              S3Configuration.builder()
+                                             .pathStyleAccessEnabled(true)
+                                             .build()
+                          )
                           .build();
     }
 }

@@ -12,11 +12,7 @@ public record UploadFileParam(FileType fileType, String filename, UserEntity use
                               FileCategory category, MultipartFile multipartFile) {
 
     public String getRelativePath() {
-        return category.toString()
-                       .toLowerCase()
-            + "/"
-            + UUID.randomUUID()
-            + "."
-            + fileType.getExtension();
+        return String.format("%s/%s.%s", category.toString()
+                                                 .toLowerCase(), UUID.randomUUID(), fileType.getExtension());
     }
 }

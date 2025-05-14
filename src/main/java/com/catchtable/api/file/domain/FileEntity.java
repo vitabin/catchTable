@@ -1,5 +1,6 @@
 package com.catchtable.api.file.domain;
 
+import com.catchtable.api.file.DTO.S3UploadCacheDTO;
 import com.catchtable.api.file.DTO.UploadFileParam;
 import com.catchtable.api.user.domain.UserEntity;
 import com.catchtable.base.BaseEntity;
@@ -39,6 +40,8 @@ public class FileEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    private String mimeType = "multipart/form-data";
+
     private LocalDateTime deletedAt;
 
     public static FileEntity of(UploadFileParam uploadFileParam, String uuid,
@@ -49,6 +52,18 @@ public class FileEntity extends BaseEntity {
         entity.uuid = uuid;
         entity.user = uploadFileParam.userEntity();
         entity.path = relativePath;
+        return entity;
+    }
+
+    public static FileEntity of(S3UploadCacheDTO dto, UserEntity user, String uuid,
+        String objectKey) {
+        FileEntity entity = new FileEntity();
+        entity.path = objectKey;
+        entity.user = user;
+        entity.filename = dto.getFilename();
+        entity.fileType = dto.getFileType();
+        entity.mimeType = dto.getContentType();
+        entity.uuid = uuid;
         return entity;
     }
 
