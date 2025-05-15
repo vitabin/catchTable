@@ -34,7 +34,7 @@ public class FileService {
     private final LocalFileStorageService localFileStorageService;
     private final S3Service s3Service;
     private final UserRepository userRepository;
-    private final RedisClient redisHelper;
+    private final RedisClient redisClient;
     private final FileUtil fileUtil;
 
     @Transactional
@@ -86,7 +86,7 @@ public class FileService {
         String filename = preSignedUrlRequestParam.filename();
         FileType fileType = FileType.getFileType(filename);
         String objectKey = fileUtil.getRelativePath(preSignedUrlRequestParam.category(), fileType);
-        redisHelper.set(objectKey, S3UploadCacheDTO.of(preSignedUrlRequestParam),
+        redisClient.set(objectKey, S3UploadCacheDTO.of(preSignedUrlRequestParam),
             Duration.ofSeconds(300));
 
         return s3Service.generatePutPreSignedURL(objectKey,
@@ -102,7 +102,7 @@ public class FileService {
     }
 
     public Boolean isUploaded(String objectKey) {
-        S3UploadCacheDTO cache = redisHelper.get(objectKey, S3UploadCacheDTO.class);
+        S3UploadCacheDTO cache = redisClient.get(objectKey, S3UploadCacheDTO.class);
 
         if (cache == null || !s3Service.isUploaded(objectKey, cache.getContentType(),
             cache.getContentLength())) {
@@ -114,7 +114,7 @@ public class FileService {
                                                   UserErrorCode.USER_NOT_FOUND));
         fileRepository.save(
             FileEntity.of(cache, userEntity, fileUtil.getUUID(objectKey), objectKey));
-        redisHelper.delete(objectKey);
+        redisClient.delete(objectKey);
 
         return true;
     }

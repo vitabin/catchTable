@@ -45,8 +45,8 @@ public class UserEntity extends BaseEntity {
     @Column(name = "nick_name")
     private String nickName;
 
-    @Column(name = "avartar")
-    private String avartar;
+    @Column(name = "avatar")
+    private String avatar;
 
     @OneToOne(mappedBy = "user")
     private TokenEntity token;
@@ -69,15 +69,13 @@ public class UserEntity extends BaseEntity {
         return entity;
     }
 
-    public UserEntity fromDto(SignInRequestDTO dto) {
+    public void fromDto(SignInRequestDTO dto) {
         userName = dto.getUserName();
         password = dto.getPassword();
-        return this;
     }
 
-    public UserEntity updateToken(TokenEntity tokenEntity) {
+    public void updateToken(TokenEntity tokenEntity) {
         token = tokenEntity;
-        return this;
     }
 
     public UserEntity updatePassword(String password) {
@@ -85,10 +83,9 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public UserEntity withdrawUser() {
+    public void withdrawUser() {
         deletedAt = LocalDateTime.now(Clock.systemDefaultZone());
         deleteToken();
-        return this;
     }
 
     public void deleteToken() {

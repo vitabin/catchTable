@@ -13,7 +13,7 @@ public class UserDTO {
     private String userName;
     private String realName;
     private String nickName;
-    private String avartar;
+    private String avatar;
     private LocalDateTime createdAt;
 
     public static UserDTO from(UserEntity user) {
@@ -22,7 +22,7 @@ public class UserDTO {
         dto.userName = user.getUserName();
         dto.realName = user.getRealName();
         dto.nickName = user.getNickName();
-        dto.avartar = user.getAvartar();
+        dto.avatar = user.getAvatar();
         dto.createdAt = user.getCreatedAt();
 
         return dto;
