@@ -15,7 +15,7 @@ import com.catchtable.exception.exception.UserException;
 import com.catchtable.redis.RedisClient;
 import com.catchtable.response.error.FileErrorCode;
 import com.catchtable.response.error.UserErrorCode;
-import com.catchtable.util.file.classes.FileUtil;
+import com.catchtable.util.file.implement.FileUtil;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.time.Duration;
