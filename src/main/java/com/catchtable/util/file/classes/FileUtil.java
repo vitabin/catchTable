@@ -1,7 +1,7 @@
 package com.catchtable.util.file.classes;
 
-import com.catchtable.api.file.domain.FileCategory;
-import com.catchtable.api.file.domain.FileType;
+import com.catchtable.app.api.file.domain.FileCategory;
+import com.catchtable.app.api.file.domain.FileType;
 import com.catchtable.exception.exception.FileException;
 import com.catchtable.response.error.FileErrorCode;
 import java.util.UUID;
@@ -12,7 +12,8 @@ public class FileUtil {
 
     public String getRelativePath(FileCategory fileCategory, FileType fileType) {
         return String.format("%s/%s.%s", fileCategory.toString()
-                                                     .toLowerCase(), UUID.randomUUID(), fileType.getExtension());
+                                                     .toLowerCase(), UUID.randomUUID(),
+            fileType.getExtension());
     }
 
     public String getUUID(String str) {

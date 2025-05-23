@@ -1,6 +1,6 @@
 package com.catchtable.util.jwt;
 
-import com.catchtable.api.user.domain.UserRole;
+import com.catchtable.app.api.user.domain.UserRole;
 import com.catchtable.exception.exception.AuthException;
 import com.catchtable.response.error.AuthErrorCode;
 import io.jsonwebtoken.Claims;
