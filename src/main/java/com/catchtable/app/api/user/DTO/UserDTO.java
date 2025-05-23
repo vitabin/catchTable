@@ -1,4 +1,4 @@
-package com.catchtable.app.api.user.service.DTO;
+package com.catchtable.app.api.user.DTO;
 
 import com.catchtable.app.api.user.domain.UserEntity;
 import java.time.LocalDateTime;

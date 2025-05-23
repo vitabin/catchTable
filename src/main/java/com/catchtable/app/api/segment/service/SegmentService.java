@@ -3,7 +3,6 @@ package com.catchtable.app.api.segment.service;
 import com.catchtable.app.api.segment.DTO.CreateSegmentParam;
 import com.catchtable.app.api.segment.domain.SegmentEntity;
 import com.catchtable.app.api.segment.repository.SegmentRepository;
-import com.catchtable.app.api.segment.repository.UserSegmentRepository;
 import com.catchtable.exception.exception.SegmentException;
 import com.catchtable.response.error.SegmentErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class SegmentService {
 
     private final SegmentRepository segmentRepository;
-    private final UserSegmentRepository userSegmentRepository;
 
     public Page<SegmentEntity> getAllSegments(Pageable page, Boolean onlyActivate) {
         if (!onlyActivate) {
