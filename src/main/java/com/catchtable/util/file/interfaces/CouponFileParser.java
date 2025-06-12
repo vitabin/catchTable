@@ -1,7 +1,7 @@
 package com.catchtable.util.file.interfaces;
 
-import com.catchtable.app.api.admin.DTO.UploadCouponParam;
-import com.catchtable.app.api.file.domain.FileType;
+import com.catchtable.api.admin.DTO.UploadCouponParam;
+import com.catchtable.api.file.domain.FileType;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;

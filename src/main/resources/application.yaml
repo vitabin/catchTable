@@ -25,7 +25,7 @@ spring:
       location: /var/www/files/tmp
   jpa:
     hibernate:
-      ddl-auto: update
+#      ddl-auto: update
       format_sql: true
       use_sql_comments: true
     show-sql: true
@@ -58,11 +58,11 @@ file:
 
 cloud:
   aws:
-    region: ${S3_REGION}
+    region: ${AWS_REGION}
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
-    endpoint: ${S3_ENDPOINT}
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    endpoint: ${AWS_ENDPOINT}
   s3:
     bucket: ${S3_BUCKET_NAME}
     expiration: 5

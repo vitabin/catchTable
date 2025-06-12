@@ -1,7 +1,7 @@
 package com.catchtable.util.file.implement;
 
-import com.catchtable.app.api.admin.DTO.UploadCouponParam;
-import com.catchtable.app.api.file.domain.FileType;
+import com.catchtable.api.admin.DTO.UploadCouponParam;
+import com.catchtable.api.file.domain.FileType;
 import com.catchtable.exception.exception.FileException;
 import com.catchtable.response.error.FileErrorCode;
 import com.catchtable.util.file.interfaces.CouponFileParser;
