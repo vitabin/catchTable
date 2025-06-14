@@ -44,7 +44,6 @@ public class UserController {
     public SuccessResponse<List<Long>> getUserSegments(@PathVariable("userId") Long userId,
         @Pagination Pageable page) {
         UserSegmentResponseDTO response = userService.getUserSegments(userId, page);
-        return SuccessResponse.of(SuccessCode.SUCCESS, response.getSegmentIds(),
-            response.getResponseMetaData());
+        return SuccessResponse.of(SuccessCode.SUCCESS, response.getSegmentIds());
     }
 }
