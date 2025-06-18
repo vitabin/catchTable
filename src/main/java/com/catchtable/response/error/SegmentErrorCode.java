@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SegmentErrorCode implements BaseCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "Segment Not Founded"),
+    UNEXPECTED_PARAM(HttpStatus.BAD_REQUEST, "4004", "Unexpected parameter"),
     ;
 
     private final HttpStatus httpStatus;

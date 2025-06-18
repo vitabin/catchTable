@@ -33,7 +33,7 @@ public class SegmentEntity extends BaseEntity {
 
     @Column(name = "`condition`")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> condition;
+    private Map<String, Map<String, Integer>> condition;
 
     private LocalDateTime deletedAt;
 
